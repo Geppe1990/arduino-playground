@@ -13,7 +13,8 @@ void wifiConnect() {
 }
 
 void setup() {
-  char endpoint[] = "www.zeppelinmaker.it";
+  char endpoint[] = "jsonplaceholder.typicode.com";
+  char path[] = "/posts/1";
   int port = 80;
   Serial.begin(115200);
   wifiConnect();
@@ -21,10 +22,11 @@ void setup() {
 
   WiFiClient client;
   if (!client.connect(endpoint, port)) {
-    Serial.println("Non connesso");
+    Serial.println("[Endpoint "+ (String)endpoint +" non raggiunto]");
   } else {
-    client.println("GET /helloworld.txt HTTP/1.1");
-    client.println("Host: www.zeppelinmaker.it");
+    Serial.println("[Endpoint "+ (String)endpoint +" raggiunto]");
+    client.println("GET " + (String)path +" HTTP/1.1");
+    client.println("Host: " + (String)endpoint);
     client.println("Connection: close");
     client.println("");
 
@@ -37,6 +39,7 @@ void setup() {
     }
     
     //ricezione dati 
+    Serial.println("Stampo la risposta:\n");
     while (client.available()) {
       String line = client.readStringUntil('\r');
       Serial.print(line);
